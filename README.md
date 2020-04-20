@@ -13,7 +13,7 @@ nebo mobilnímu telefonu. Rozhraní umožňuje připojit až 128 zařízení na 
 **Důležité je pořadí přenosu bitů. Jak je znázorněno na obrázku, komunikace začíná MSB bitem zprávy a končí LSB bitem zprávy.**
 
 #### Komunikační linka TM1637
-Zapojení je opět dvouvodičové (vodiče *CLK* a *DIO*; jiné pojmenování oproti I2C kvůli licenčním důvodům, funkce je však stejná) s pull-up rezistory. Jelikož u tohoto typu komunikace neexistuje adresování (základní rozdíl od I2C), lze na linku připojit pouze jeden SLAVE obvod (nebo více, ale všechna SLAVE zařízení budou přijímat stejná data). Přenos dat se pak děje stejně jako u I2C  tím rozdílem, že jako **první po START bitu odesíláme LSB bit**.
+Zapojení je opět dvouvodičové (vodiče *CLK* a *DIO*; jiné pojmenování oproti I2C kvůli licenčním důvodům, funkce je však stejná) s pull-up rezistory. Jelikož u tohoto typu komunikace neexistuje adresování (základní rozdíl od I2C), lze na linku připojit pouze jeden SLAVE obvod (nebo více, ale všechna SLAVE zařízení budou přijímat stejná data). Přenos dat se pak děje stejně jako u I2C  tím rozdílem, že jako **první z datového slova odesíláme LSB bit**.
 
 O nastavení TM1637 a jeho dislejů rozhodují 3 datová slova, kterým budeme říkat příkazy. První příkaz určuje zda chceme data číst či zapisovat, zda chceme adresu digitu nastavit fixně či inkrementovat od zvolené hodnoty, atd... (viz. tabulka). V naší impelemntaci užíváme slovo *01000000*. Jeho význam lze slovně popsat jako: nastavení displeje pro zápis do normálního módu s automatickou inkrementací adresy od počáteční adresy nastavenou dalším příkazem.
 
