@@ -8,8 +8,9 @@ nebo mobilnímu telefonu. Rozhraní umožňuje připojit až 128 zařízení na 
 *master* nebo *slave*. Vodiče nazýváme *SDA* (Synchronous data) a *SCL* (Synchronous clock). Oba jsou připojeny pull-up rezistorem k vysoké úrovni - HIGH v klidovém stavu. Změna úrovně *SDA* je možna pouze když je úroveň *SCL* nízká. To neplatí v případě odesílání tzv. *STOP bitu* a *START bitu*, kterými komunikace počíná a končí. Zřízení, které chce poslat data (master), vyšle start bit - SCL: HIGH a SDA: sestupná hrana - čímž se všechna zařízení na lince připraví k příjmu. Master odešle sedmibitovou adresu a jednobitový požadavek na přenos *R/W* (čtení/zápis). Příjemce (slave) ztotožněný s vyslanou adresou vyšle potvrzovací bit, tzv. *ACK*. Následuje samotná datová komunikace, kdy kažý byte je následován ACK bitem, směr komunikace určen R/W bitem, obsaženým ve zprávě, a konec komunikace zakončen STOP bitem.
 <img src = "I2C_wiring.png">
 <img src = "I2C_comunication.png">
-Obrazky: zavavov.cz
-Důležité je pořadí přenosu bitů. Jak je znázorněno na obrázku, komunikace začíná MSB bitem zprávy a končí LSB bitem zprávy.
+
+*Obrázky: www.zavavov.cz.*
+**Důležité je pořadí přenosu bitů. Jak je znázorněno na obrázku, komunikace začíná MSB bitem zprávy a končí LSB bitem zprávy.**
 
 #### Komunikační linka TM1637
 Zapojení je opět dvouvodičové (vodiče *SCL* a *SDA*) s pull-up rezistory. Jelikož u tohoto typu komunikace neexistuje adresování (základní rozdíl od I2C), lze na linku připojit pouze jeden SLAVE obvod (nebo více, ale všechna SLAVE zařízení budou přijímat stejná data). 
