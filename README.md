@@ -1,6 +1,6 @@
 ### TM1637
 TM1637 je integrovaný obvod, který umožňuje po specifickém komunikačním rozhraní ovládat až 6 jednodigitových sedmisegmentových displejů.
-Komunikační rozhraní je založeno na bázi dvouvodičové sběrnice I2C. Rodíl je především ve způsobu komunikace.
+Komunikační rozhraní je založeno na bázi dvouvodičové sběrnice I2C. Rozdíl je především ve způsobu komunikace.
 
 #### I2C - zjednodušený popis
 Je multimastrová počítačová sběnice užívaná v nízkorychlostních systémech, např. připojení periferií k základní desce, vestavěnému systému
@@ -9,7 +9,7 @@ nebo mobilnímu telefonu. Rozhraní umožňuje připojit až 128 zařízení na 
 <img src = "I2C_wiring.png">
 <img src = "I2C_comunication.png">
 
-*Obrázky: www.zavavov.cz.*
+*Obrázky: www.zavavov.cz.*     
 **Důležité je pořadí přenosu bitů. Jak je znázorněno na obrázku, komunikace začíná MSB bitem zprávy a končí LSB bitem zprávy.**
 
 #### Komunikační linka TM1637
