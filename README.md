@@ -1,4 +1,8 @@
-### TM1637
+# COUNTDOWN S N-KODÉREM A DISPLEJEM OVLÁDANÝM POMOCÍ DVOUVODIČOVÉ SBĚRNICE#       
+Úkolem je pomocí n-kodéru KY_040 nastavit žádanou hodnotu odpočtu a pomocí jeho tlačítka tento odpočet spustit. Ke zobrazování má sloužit čtyřdigitový sedmisegmentový displej obsluhovaný řadičem TM1637, který je ovládán dvouvodičovou sběrnicí na bázi I2C.   
+
+
+#### TM1637
 TM1637 je integrovaný obvod, který umožňuje po specifickém komunikačním rozhraní ovládat až 6 jednodigitových sedmisegmentových displejů.
 Komunikační rozhraní je založeno na bázi dvouvodičové sběrnice I2C. Rozdíl je především ve způsobu komunikace.
 
@@ -70,7 +74,8 @@ Není zde implementován ani jakýkoliv reset. Ten se nachází pouze v entitác
 **Popis entity control_logic**       
 Tato entita má na starosti odesílání hodnot jednotlivých cifer pro driver dipleje. Při režimu nastavování hodnoty, tj. když není stlačeno tlačítko n-kodéru ani synchronního resetu, pouze sleduje hodnoty proměnných vycházejících z driveru pro n-kodér (tisíce, stovky, desítky, jednotky) a poskytuje je driveru displeje. Pakliže stlačíme resetovací tlačítko, všechny proměnné se vynulují a nastavování hodnoty běží od začátku. Po nastavení žádané hodnoty, stiskneme tlačítko n-kodéru, čímž se jednak zablokuje další nastavování hodnoty a jednak spustí odpočet nastavené hodnoty do nuly. Tento odpočet lze přerušit pouze resetovacím tlačítkem. Když zařízení odpočítá do nuly, sepne se signalizační výstup (v našem případě rozsvícení LED diody) a nastaví se aktuální hodnota přijatá entitou ovládající n-kodér. Signalizační výstup je aktivní až do nastavení a započetí odpočtu následující hodnoty.   
 
-<img src = "TM1637_tb_lastDigit3rdCommandAndStartNewWritingCycle.PNG">       
+<img src = "counting_down.PNG">       
+*Obrázek: odpočet od nastavené hodnoty pomocí driveru KY_040*
 
-
-<img src = "LEDon_when_counter0000.PNG">
+<img src = "LEDon_when_counter0000.PNG">     
+*Obrázek: aktivace signalizačního výstupu při dokončení odpočtu a opětovné nastavení hodnoty na základě dat z KY_040*
