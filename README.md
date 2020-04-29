@@ -82,7 +82,7 @@ Tato entita má na starosti odesílání hodnot jednotlivých cifer pro driver d
 
 **top**       
 <img src = "top.PNG">
-<img src = "encoder_countdown">
+<img src = "encoder_countdown.PNG">
 *Zobrazení vstupů a výstupů na horním obrázku a svázání entit vnitřními signály na dolním obrázku*
 
 
