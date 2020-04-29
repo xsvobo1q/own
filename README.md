@@ -62,7 +62,10 @@ sedmisegmentový displej a to počátkem každé komunikační sekvence (tzn. od
 Není zde implementován ani jakýkoliv reset. Ten se nachází pouze v entitách pro odpočet a čtení dat z n-kodéru. Resetem v průběhu komunikační sekvence by byla celá přerušena a bylo by nutno celé zařízení odpojit od napájení a znovu připojit (reset by bylo možné implementovat za případu, že bysme četly ACK bit).      
 
 <img src = "TM1637_tb_first2commandsAndThirst2digits.PNG">      
-*Obrázek: odeslání prvních dvou příkazů a digitů odpovídajícím tisícům, atovkám a j´desítkám*
+*Obrázek: odeslání prvních dvou příkazů a digitů odpovídajícím tisícům, stovkám a desítkám (lze také vidět, že nelze měnit hodnoty vysílaných dat v průběhu vysílací sekvence)*       
+
+<img src = "TM1637_tb_lastDigit3rdCommandAndStartNewWritingCycle.PNG">     
+*Obrázek: odeslání posleního digitu, třetího příkazu a znázornění počátku následující zobrazovací sekvence*
 
 **Popis entity control_logic**       
 Tato entita má na starosti odesílání hodnot jednotlivých cifer pro driver dipleje. Při režimu nastavování hodnoty, tj. když není stlačeno tlačítko n-kodéru ani synchronního resetu, pouze sleduje hodnoty proměnných vycházejících z driveru pro n-kodér (tisíce, stovky, desítky, jednotky) a poskytuje je driveru displeje. Pakliže stlačíme resetovací tlačítko, všechny proměnné se vynulují a nastavování hodnoty běží od začátku. Po nastavení žádané hodnoty, stiskneme tlačítko n-kodéru, čímž se jednak zablokuje další nastavování hodnoty a jednak spustí odpočet nastavené hodnoty do nuly. Tento odpočet lze přerušit pouze resetovacím tlačítkem. Když zařízení odpočítá do nuly, sepne se signalizační výstup (v našem případě rozsvícení LED diody) a nastaví se aktuální hodnota přijatá entitou ovládající n-kodér. Signalizační výstup je aktivní až do nastavení a započetí odpočtu následující hodnoty.   
