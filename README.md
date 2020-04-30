@@ -71,6 +71,26 @@ Není zde implementován ani jakýkoliv reset. Ten se nachází pouze v entitác
 <img src = "TM1637_tb_lastDigit3rdCommandAndStartNewWritingCycle.PNG">
 *Obrázek: odeslání posleního digitu, třetího příkazu a znázornění počátku následující zobrazovací sekvence.*    
 
+#### KY-040
+Je  rotačný enkodér, ktorý umožňuje určiť o koľko pozícií s ním bolo otočené a do ktorého smeru sa otáča. Pri otáčaní  sa generujú pulzy, čo umožňuje určiť smer otáčania na základe dvoch výstupných fázovo posunutých signálov. Tento enkodér má 30 pozícií na jedno celé otočenie.
+Enkodér obsahuje dva switche, jeden spája pin A a pin C, druhý spája pin B a pin C. V každej pozícií enkodéru sú oba switche zatvorené alebo otvorené. Smer otáčania vieme určiť podľa toho, ktorý z týchto dvoch switchov zmenil svoj stav ako prvý. Pri otáčaní po smere hodinových ručičiek zmení svoj stav ako prvý switch prepájajúci A a C, pri otáčaní proti smeru hodinových ručičiek zmení stav ako prvý switch prepájajúci B a C.
+Nízka úroveň výstupného signálu je generovaná uzemneným pinom C, ktorý predáva hodnotu do CLK a DT pinov v prípade , keď sú oba switche zatvorené. Vysoká úroveň je generovaná pomocou 5V vstupu a pull-up rezistorov, CLK a DT sú vo vysokej úrovni, keď sú oba switche otvorené. 
+Pri zatlačení tlačítka (pin SW) sa switch, ktorý bol predtým otvorený, uzavrie. Zmenu stavu využívame na začatie odpočtu od nastavenej hodnoty.
+
+<img src = "KYschematic.PNG">
+*Obrázok: Schéma rotačného enkodéru KY-040; zdroj: katalogový list Keyes KY-040*
+
+**Popis entity KY-040**
+Pri zmene logickej úrovne pomocou tlačítka alebo switchu môžu ich mechanické kontakty generovať parazitné zákmity, čo môže ovplyvniť nadväzujúce obvody. Tento jav sa nazýva switch bouncing.
+Tento problém riešime tak, že v entite používame pomalšie hodiny slow_clock, ktoré sú synchronizované s hodinovým signálom clk_i. Hodnota slow_clock_counter sa inkrementuje pri každej vzostupnej hrane clk_i, pri dosiahnutí nastavenej konštanty LIMIT sa resetuje na 0. Hodnota konštanty LIMIT  teda určuje rýchlosť pomalších hodín, pri hodnote 1 je rýchlosť rovnaká ako clk_i. Túto konštantu treba doladiť pri použití konkrétneho reálneho obvodu.
+Pri vzostupnej hrane slow_clock sa hodnota CLK (z pinu A) uloží do premennej prev_A. Ak je jej hodnota rozdielna od predošlej hodnoty CLK, znamená to, že s enkodérom otáčame. Porovnaním hodnoty DT (z pinu B) s prev_A vieme určiť smer otáčania a na základe neho pričítať alebo odčítať.
+
+<img src = "KYadding.PNG">
+*Obrázok: Pripočítavanie pri otáčaní enkodéru v smere hodinových ručičiek*
+
+<img src = "KYsubtraction.PNG">
+*Obrázok: Odpočítavanie pri otáčaní enkodéru proti smeru hodinových ručičiek*    
+
 **Popis entity control_logic**       
 Tato entita má na starosti odesílání hodnot jednotlivých cifer pro driver dipleje. Při režimu nastavování hodnoty, tj. když není stlačeno tlačítko n-kodéru ani synchronního resetu, pouze sleduje hodnoty proměnných vycházejících z driveru pro n-kodér (tisíce, stovky, desítky, jednotky) a poskytuje je driveru displeje. Pakliže stlačíme resetovací tlačítko, všechny proměnné se vynulují a nastavování hodnoty běží od začátku. Po nastavení žádané hodnoty, stiskneme tlačítko n-kodéru, čímž se jednak zablokuje další nastavování hodnoty a jednak spustí odpočet nastavené hodnoty do nuly. Tento odpočet lze přerušit pouze resetovacím tlačítkem. Když zařízení odpočítá do nuly, sepne se signalizační výstup (v našem případě rozsvícení LED diody) a nastaví se aktuální hodnota přijatá entitou ovládající n-kodér. Signalizační výstup je aktivní až do nastavení a započetí odpočtu následující hodnoty.   
 
@@ -85,9 +105,12 @@ Tato entita má na starosti odesílání hodnot jednotlivých cifer pro driver d
          
 <img src = "top.PNG">   
 <img src = "encoder_countdown.PNG">
-*Zobrazení vstupů a výstupů na horním obrázku a svázání entit vnitřními signály na dolním obrázku*   
+*Zobrazení vstupů a výstupů na horním obrázku a svázání entit vnitřními signály na dolním obrázku* 
 
-
+**Závěr**
+Původně byly vytvořené 3 samostatné entity. Driver pro displej, driver pro n-kodér a entita řídící logiky. Po jejich pospojení v topu však nastala chyba s rychlostí programu. Proměnné jsme totiž přenášeli jako integerovské čísla. Integerovský datový typ se skládá z osmi bajtů. Zde nastal první zádrhel - nedostatek místa v CPLD. Dalším problémem byla rychlost hodin. Během jedné periody nebylo zařízení schopno vykonat stanovený počet úkonů v jedné entitě. Výsledná simulace topu tedy nebyla funkční (i když při debugování řádek po řádku program fungoval).     
+Spojili jsme tedy entitu control_logic s entitou KY_040. Také data jsme přestali přenášet jako integer nýbrž jako unsigned a std_logic_vector. Po těchto zásazích simulace výsledného topu funguje.    
+Po vytvoření UCF souboru a pokusu zkompilovat celý top pro implementaci opět nastala chyba. Program je velký. Implementace tedy nejspíš nebude možná (možná po pár odborných zásazích ano).
 
 
 
